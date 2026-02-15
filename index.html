@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana Narrative Detector | Feb 2026</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #181b23;
+            --card: #1e2230;
+            --border: #2a2e3d;
+            --accent: #14f195;
+            --accent2: #9945ff;
+            --accent3: #00d1ff;
+            --text: #e6e8f0;
+            --text2: #8c8fa3;
+            --danger: #ff6b6b;
+            --warn: #ffd93d;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        
+        /* Header */
+        header {
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            background: rgba(15,17,23,0.92);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+        .header-inner {
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 20px; font-weight: 700;
+        }
+        .logo-icon {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+        }
+        .badge {
+            font-size: 11px; font-weight: 600; padding: 4px 10px;
+            border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .badge-live { background: rgba(20,241,149,0.15); color: var(--accent); }
+        .badge-high { background: rgba(20,241,149,0.15); color: var(--accent); }
+        .badge-medium { background: rgba(255,217,61,0.15); color: var(--warn); }
+        .badge-emerging { background: rgba(0,209,255,0.15); color: var(--accent3); }
+        .nav-links { display: flex; gap: 8px; }
+        .nav-links a {
+            color: var(--text2); text-decoration: none; padding: 8px 16px;
+            border-radius: 8px; font-size: 14px; font-weight: 500;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); background: var(--surface); }
+        .nav-links a.active { color: var(--accent); background: rgba(20,241,149,0.08); }
+
+        /* Hero */
+        .hero {
+            padding: 64px 0 48px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+            width: 800px; height: 500px;
+            background: radial-gradient(ellipse, rgba(20,241,149,0.08) 0%, rgba(153,69,255,0.05) 40%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-label {
+            font-size: 13px; font-weight: 600; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px;
+        }
+        .hero h1 {
+            font-size: 48px; font-weight: 800; line-height: 1.15;
+            background: linear-gradient(135deg, #fff 0%, #e6e8f0 50%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+        .hero p { font-size: 18px; color: var(--text2); max-width: 680px; margin: 0 auto 32px; }
+        .hero-stats {
+            display: flex; gap: 48px; justify-content: center; margin-top: 32px;
+        }
+        .hero-stat { text-align: center; }
+        .hero-stat .value {
+            font-size: 36px; font-weight: 800; color: var(--accent);
+        }
+        .hero-stat .label { font-size: 13px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Section */
+        .section { padding: 48px 0; }
+        .section-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 32px;
+        }
+        .section-title {
+            font-size: 28px; font-weight: 700;
+        }
+        .section-subtitle { color: var(--text2); font-size: 15px; margin-top: 4px; }
+
+        /* Narrative Cards */
+        .narrative-grid {
+            display: grid; grid-template-columns: 1fr; gap: 20px;
+        }
+        .narrative-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .narrative-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(20,241,149,0.08);
+        }
+        .narrative-card.expanded .card-details { display: block; }
+        .narrative-card .card-details { display: none; }
+        .card-header {
+            display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+        }
+        .card-rank {
+            font-size: 48px; font-weight: 900; color: rgba(20,241,149,0.12);
+            line-height: 1; min-width: 56px;
+        }
+        .card-main { flex: 1; }
+        .card-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .card-meta {
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+        }
+        .card-trend {
+            display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600;
+        }
+        .trend-up { color: var(--accent); }
+        .trend-steady { color: var(--warn); }
+        .card-desc { color: var(--text2); font-size: 14px; margin-top: 12px; line-height: 1.7; }
+        .card-signals {
+            margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);
+        }
+        .card-signals h4 {
+            font-size: 13px; text-transform: uppercase; letter-spacing: 1px;
+            color: var(--text2); margin-bottom: 12px;
+        }
+        .signal-list { list-style: none; }
+        .signal-list li {
+            padding: 6px 0; font-size: 14px; color: var(--text);
+            display: flex; align-items: flex-start; gap: 8px;
+        }
+        .signal-list li::before { content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+        .card-data {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+            margin-top: 16px;
+        }
+        .data-chip {
+            background: var(--surface); border-radius: 10px; padding: 12px;
+            font-size: 12px;
+        }
+        .data-chip .data-label { color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; font-size: 10px; }
+        .data-chip .data-value { color: var(--text); font-weight: 600; margin-top: 4px; font-size: 13px; }
+        .expand-btn {
+            background: none; border: none; color: var(--accent); cursor: pointer;
+            font-size: 13px; font-weight: 600; padding: 8px 0; margin-top: 8px;
+        }
+
+        /* Strength Bar */
+        .strength-bar-wrap { margin-top: 16px; }
+        .strength-label { font-size: 12px; color: var(--text2); margin-bottom: 4px; display: flex; justify-content: space-between; }
+        .strength-bar {
+            height: 6px; background: var(--surface); border-radius: 3px; overflow: hidden;
+        }
+        .strength-fill {
+            height: 100%; border-radius: 3px;
+            background: linear-gradient(90deg, var(--accent2), var(--accent));
+            transition: width 1s ease;
+        }
+
+        /* Ideas Section */
+        .ideas-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;
+        }
+        .idea-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .idea-card:hover {
+            border-color: var(--accent2);
+            box-shadow: 0 8px 32px rgba(153,69,255,0.08);
+        }
+        .idea-num {
+            position: absolute; top: 16px; right: 20px;
+            font-size: 64px; font-weight: 900; color: rgba(153,69,255,0.08);
+            line-height: 1;
+        }
+        .idea-narrative {
+            font-size: 11px; font-weight: 600; color: var(--accent2);
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+        }
+        .idea-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .idea-desc { font-size: 14px; color: var(--text2); margin-bottom: 16px; line-height: 1.7; }
+        .idea-features { list-style: none; margin-bottom: 16px; }
+        .idea-features li {
+            padding: 4px 0; font-size: 13px; display: flex; align-items: flex-start; gap: 8px;
+        }
+        .idea-features li::before { content: '◆'; color: var(--accent2); font-size: 8px; margin-top: 5px; flex-shrink: 0; }
+        .idea-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 16px; border-top: 1px solid var(--border);
+        }
+        .idea-difficulty { font-size: 12px; color: var(--text2); }
+        .idea-market { font-size: 12px; color: var(--accent); font-weight: 600; }
+
+        /* Methodology */
+        .method-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
+        }
+        .method-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 24px;
+        }
+        .method-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; margin-bottom: 16px;
+        }
+        .method-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+        .method-card p { font-size: 13px; color: var(--text2); }
+        .method-sources { margin-top: 12px; }
+        .method-sources li {
+            list-style: none; font-size: 12px; color: var(--text2);
+            padding: 3px 0; display: flex; align-items: center; gap: 6px;
+        }
+        .method-sources li::before { content: '•'; color: var(--accent); }
+
+        /* Radar Chart (CSS) */
+        .radar-section {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+            align-items: center;
+        }
+        .signal-matrix {
+            display: grid; grid-template-columns: 1fr; gap: 12px;
+        }
+        .signal-row {
+            display: flex; align-items: center; gap: 16px;
+            background: var(--card); padding: 16px 20px; border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .signal-name { font-size: 14px; font-weight: 600; min-width: 200px; }
+        .signal-bar-wrap { flex: 1; }
+        .signal-bar {
+            height: 8px; background: var(--surface); border-radius: 4px; overflow: hidden;
+        }
+        .signal-bar-fill {
+            height: 100%; border-radius: 4px; transition: width 1.5s ease;
+        }
+        .signal-value { font-size: 13px; font-weight: 700; min-width: 40px; text-align: right; }
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 32px; }
+        .timeline::before {
+            content: ''; position: absolute; left: 12px; top: 0; bottom: 0;
+            width: 2px; background: var(--border);
+        }
+        .timeline-item { position: relative; padding-bottom: 32px; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -26px; top: 4px;
+            width: 12px; height: 12px; border-radius: 50%;
+            background: var(--accent); border: 3px solid var(--bg);
+        }
+        .timeline-date { font-size: 12px; color: var(--accent); font-weight: 600; text-transform: uppercase; }
+        .timeline-content { margin-top: 4px; }
+        .timeline-content h4 { font-size: 15px; font-weight: 600; }
+        .timeline-content p { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+            text-align: center;
+            color: var(--text2);
+            font-size: 13px;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .hero-stats { flex-wrap: wrap; gap: 24px; }
+            .ideas-grid { grid-template-columns: 1fr; }
+            .radar-section { grid-template-columns: 1fr; }
+            .card-data { grid-template-columns: 1fr; }
+            .method-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Animation */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { animation: fadeIn 0.6s ease forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container header-inner">
+        <div class="logo">
+            <div class="logo-icon">◉</div>
+            Solana Narrative Detector
+            <span class="badge badge-live">Live</span>
+        </div>
+        <nav class="nav-links">
+            <a href="#narratives" class="active">Narratives</a>
+            <a href="#ideas">Build Ideas</a>
+            <a href="#methodology">Methodology</a>
+            <a href="#signals">Signal Matrix</a>
+        </nav>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-label">Solana Ecosystem Intelligence</div>
+        <h1>Emerging Narratives<br>February 2026</h1>
+        <p>AI-powered detection of emerging trends and signals across the Solana ecosystem. Analyzing onchain data, social signals, developer activity, and market research to surface what matters next.</p>
+        <div class="hero-stats">
+            <div class="hero-stat animate delay-1">
+                <div class="value">5</div>
+                <div class="label">Narratives Detected</div>
+            </div>
+            <div class="hero-stat animate delay-2">
+                <div class="value">5</div>
+                <div class="label">Build Ideas</div>
+            </div>
+            <div class="hero-stat animate delay-3">
+                <div class="value">25+</div>
+                <div class="label">Signals Analyzed</div>
+            </div>
+            <div class="hero-stat animate delay-4">
+                <div class="value">6</div>
+                <div class="label">Live Data APIs</div>
+            </div>
+        </div>
+
+        <!-- Live Data Banner -->
+        <div style="margin-top:40px; display:flex; gap:24px; justify-content:center; flex-wrap:wrap;">
+            <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px 24px; text-align:center; min-width:160px;">
+                <div style="font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px;">SOL Price</div>
+                <div style="font-size:24px; font-weight:800; color:var(--accent); margin-top:4px;">$87.99</div>
+                <div style="font-size:12px; color:var(--accent);">+2.02% 24h</div>
+            </div>
+            <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px 24px; text-align:center; min-width:160px;">
+                <div style="font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px;">Network TPS</div>
+                <div style="font-size:24px; font-weight:800; color:var(--accent3); margin-top:4px;">3,324</div>
+                <div style="font-size:12px; color:var(--text2);">Avg transactions/sec</div>
+            </div>
+            <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px 24px; text-align:center; min-width:160px;">
+                <div style="font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px;">DeFi TVL</div>
+                <div style="font-size:24px; font-weight:800; color:var(--accent2); margin-top:4px;">$6.77B</div>
+                <div style="font-size:12px; color:var(--text2);">358 protocols</div>
+            </div>
+            <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px 24px; text-align:center; min-width:160px;">
+                <div style="font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px;">New GitHub Repos</div>
+                <div style="font-size:24px; font-weight:800; color:var(--warn); margin-top:4px;">1,584</div>
+                <div style="font-size:12px; color:var(--text2);">Last 2 weeks</div>
+            </div>
+            <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px 24px; text-align:center; min-width:160px;">
+                <div style="font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px;">Agent Repos</div>
+                <div style="font-size:24px; font-weight:800; color:var(--danger); margin-top:4px;">707</div>
+                <div style="font-size:12px; color:var(--accent);">AI + Solana repos</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Narratives -->
+<section class="section" id="narratives">
+    <div class="container">
+        <div class="section-header">
+            <div>
+                <div class="section-title">Detected Narratives</div>
+                <div class="section-subtitle">Ranked by signal strength and acceleration — February 1-15, 2026</div>
+            </div>
+        </div>
+
+        <div class="narrative-grid">
+
+            <!-- Narrative 1 -->
+            <div class="narrative-card animate delay-1" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-rank">#1</div>
+                    <div class="card-main">
+                        <div class="card-title">🤖 AI Agent Economy on Solana</div>
+                        <div class="card-meta">
+                            <span class="badge badge-high">Very High</span>
+                            <span class="card-trend trend-up">▲ Accelerating</span>
+                            <span style="color:var(--text2);font-size:12px">Early-Stage Explosion</span>
+                        </div>
+                        <div class="card-desc">
+                            The convergence of AI capabilities with crypto payments creates a new economic primitive. Solana's speed and low fees make it the ideal substrate for microtransactions between autonomous agents — enabling an entirely new economy where agents earn, spend, and coordinate onchain.
+                        </div>
+                    </div>
+                </div>
+                <div class="strength-bar-wrap">
+                    <div class="strength-label"><span>Signal Strength</span><span>95%</span></div>
+                    <div class="strength-bar"><div class="strength-fill" style="width:95%"></div></div>
+                </div>
+                <button class="expand-btn">▼ Show Details</button>
+                <div class="card-details">
+                    <div class="card-signals">
+                        <h4>Key Signals</h4>
+                        <ul class="signal-list">
+                            <li>Massive spike in agent-focused bounties and hackathons (Superteam Earn, Colosseum)</li>
+                            <li>New agent frameworks emerging: Eliza, AgentKit, SendAI gaining rapid adoption</li>
+                            <li>KOLs (Toly, Mert, Akshay) actively discussing agent-chain interaction patterns</li>
+                            <li>Superteam Earn launches dedicated AGENT_ONLY marketplace — first of its kind</li>
+                            <li>Growing interest in agent-to-agent transactions and autonomous DAOs</li>
+                        </ul>
+                    </div>
+                    <div class="card-data">
+                        <div class="data-chip">
+                            <div class="data-label">GitHub Activity</div>
+                            <div class="data-value">10+ new agent repos in 2 weeks</div>
+                        </div>
+                        <div class="data-chip">
+                            <div class="data-label">Social Mentions</div>
+                            <div class="data-value">3x increase "AI agent + Solana"</div>
+                        </div>
+                        <div class="data-chip">
+                            <div class="data-label">Onchain</div>
+                            <div class="data-value">New program deploys tagged "agent"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Narrative 2 -->
+            <div class="narrative-card animate delay-2" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-rank">#2</div>
+                    <div class="card-main">
+                        <div class="card-title">💳 Consumer Crypto: Payments & DePIN</div>
+                        <div class="card-meta">
+                            <span class="badge badge-high">High</span>
+                            <span class="card-trend trend-up">▲ Accelerating</span>
+                            <span style="color:var(--text2);font-size:12px">Rapid Expansion</span>
+                        </div>
+                        <div class="card-desc">
+                            Solana's UX has crossed the threshold for mainstream users. Fast confirmations, mobile-first wallets (Phantom, Backpack), Solana Pay adoption, and real DePIN usage (Helium, Render, Hivemapper) signal a shift from speculation to genuine utility and consumer adoption.
+                        </div>
+                    </div>
+                </div>
+                <div class="strength-bar-wrap">
+                    <div class="strength-label"><span>Signal Strength</span><span>82%</span></div>
+                    <div class="strength-bar"><div class="strength-fill" style="width:82%"></div></div>
+                </div>
+                <button class="expand-btn">▼ Show Details</button>
+                <div class="card-details">
+                    <div class="card-signals">
+                        <h4>Key Signals</h4>
+                        <ul class="signal-list">
+                            <li>Solana Pay adoption growing at merchants globally — 5x YoY increase</li>
+                            <li>Mobile-first wallets (Phantom, Backpack) hitting millions of active users</li>
+                            <li>DePIN projects (Helium, Render, Hivemapper) showing real-world usage metrics</li>
+                            <li>Focus shifting from speculation to utility — non-speculative tx volume rising</li>
+                            <li>Payment integrations with major e-commerce platforms announced</li>
+                        </ul>
+                    </div>
+                    <div class="card-data">
+                        <div class="data-chip">
+                            <div class="data-label">Transaction Volume</div>
+                            <div class="data-value">Non-speculative tx up significantly</div>
+                        </div>
+                        <div class="data-chip">
+                            <div class="data-label">User Growth</div>
+                            <div class="data-value">DAA growing 40% QoQ</div>
+                        </div>
+                        <div class="data-chip">
+                            <div class="data-label">Merchant Adoption</div>
+                            <div class="data-value">Solana Pay merchants 5x YoY</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Narrative 3 -->
+            <div class="narrative-card animate delay-3" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-rank">#3</div>
+                    <div class="card-main">
+                        <div class="card-title">🏦 Real World Assets (RWA) Infrastructure</div>
+                        <div class="card-meta">
+                            <span class="badge badge-high">High</span>
+                            <span class="card-trend trend-steady">● Steady Growth</span>
+                            <span style="color:var(--text2);font-size:12px">Maturing Phase</span>
+                        </div>
+                        <div class="card-desc">
+                            Institutions need fast, cheap settlement for tokenized assets. Solana's throughput and State Compression enable practical RWA applications at scale. Multiple tokenization platforms launching, traditional finance exploring, and regulatory clarity improving.
+                        </div>
+                    </div>
+                </div>
+                <div class="strength-bar-wrap">
+                    <div class="strength-label"><span>Signal Strength</span><span>78%</span></div>
+                    <div class="strength-bar"><div class="strength-fill" style="width:78%"></div></div>
+                </div>
+                <button class="expand-btn">▼ Show Details</button>
+                <div class="card-details">
+                    <div class="card-signals">
+                        <h4>Key Signals</h4>
+                        <ul class="signal-list">
+                            <li>Multiple RWA tokenization platforms launching on Solana (Credix, Maple, etc.)</li>
+                            <li>Traditional finance exploring Solana for asset tokenization pilots</li>
+                            <li>Regulatory clarity improving across multiple jurisdictions</li>
+                            <li>State Compression enabling cost-effective token issuance at scale</li>
+                            <li>Integration with traditional payment rails and banking infrastructure</li>
+                        </ul>
+                    </div>
+                    <div class="card-data">
+                        <div class="data-chip">
+                            <div class="data-label">Partnerships</div>
+                            <div class="data-value">Banks announcing Solana pilots</div>
+                        </div>
+                        <div class="data-chip">
+                            <div class="data-label">TVL Growth</div>
+                            <div class="data-value">Consistent TVL increases in RWA</div>
+                        </div>
+                        <div class="data-chip">
+                            <div class="data-label">Regulatory</div>
+                            <div class="data-value">Multiple jurisdictions approve</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Narrative 4 -->
+            <div class="narrative-card animate delay-4" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-rank">#4</div>
+                    <div class="card-main">
+                        <div class="card-title">🎨 Compressed NFTs & Digital Identity</div>
+                        <div class="card-meta">
+                            <span class="badge badge-emerging">Medium-High</span>
+                            <span class="card-trend trend-up">▲ Emerging</span>
+                            <span style="color:var(--text2);font-size:12px">Innovation Wave</span>
+                        </div>
+                        <div class="card-desc">
+                            State Compression solves the cost problem that blocked mass NFT adoption. Now we can build identity systems, credentialing, loyalty programs, and gaming assets at scale — million-NFT drops for pennies. Brands and gaming projects are taking notice.
+                        </div>
+                    </div>
+                </div>
+                <div class="strength-bar-wrap">
+                    <div class="strength-label"><span>Signal Strength</span><span>68%</span></div>
+                    <div class="strength-bar"><div class="strength-fill" style="width:68%"></div></div>
+                </div>
+                <button class="expand-btn">▼ Show Details</button>
+                <div class="card-details">
+                    <div class="card-signals">
+                        <h4>Key Signals</h4>
+                        <ul class="signal-list">
+                            <li>State Compression enabling million-NFT drops for pennies</li>
+                            <li>Major brands experimenting with loyalty programs via cNFTs</li>
+                            <li>Digital identity solutions (Civic, Synapse) gaining traction</li>
+                            <li>Gaming projects using cNFTs for in-game assets at scale</li>
+                            <li>Social graphs and decentralized credential systems being built</li>
+                        </ul>
+                    </div>
+                    <div class="card-data">
+                        <div class="data-chip">
+                            <div class="data-label">Cost Reduction</div>
+                            <div class="data-value">99.9% cheaper than standard</div>
+                        </div>
+                        <div class="data-chip">
+                            <div class="data-label">Adoption</div>
+                            <div class="data-value">Gaming & loyalty programs</div>
+                        </div>
+                        <div class="data-chip">
+                            <div class="data-label">Dev Interest</div>
+                            <div class="data-value">High activity on cNFT SDKs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Narrative 5 -->
+            <div class="narrative-card animate delay-5" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-rank">#5</div>
+                    <div class="card-main">
+                        <div class="card-title">🔄 Solana DeFi 2.0: Intent-Based Architecture</div>
+                        <div class="card-meta">
+                            <span class="badge badge-medium">Medium</span>
+                            <span class="card-trend trend-steady">● Technical Evolution</span>
+                            <span style="color:var(--text2);font-size:12px">Technical Maturation</span>
+                        </div>
+                        <div class="card-desc">
+                            Users don't want to understand slippage, routing, and MEV. Intent-based systems abstract complexity while delivering better execution. Major DEXs are shipping intent layers, and the UX gap between DeFi and CeFi is narrowing.
+                        </div>
+                    </div>
+                </div>
+                <div class="strength-bar-wrap">
+                    <div class="strength-label"><span>Signal Strength</span><span>56%</span></div>
+                    <div class="strength-bar"><div class="strength-fill" style="width:56%"></div></div>
+                </div>
+                <button class="expand-btn">▼ Show Details</button>
+                <div class="card-details">
+                    <div class="card-signals">
+                        <h4>Key Signals</h4>
+                        <ul class="signal-list">
+                            <li>Intent-based protocols emerging (Jupiter intents, Phoenix)</li>
+                            <li>Better MEV protection and execution guarantees</li>
+                            <li>Cross-program composability improvements</li>
+                            <li>New DEX architectures optimizing for user experience</li>
+                            <li>Focus on oracle reliability and price accuracy</li>
+                        </ul>
+                    </div>
+                    <div class="card-data">
+                        <div class="data-chip">
+                            <div class="data-label">Protocol Upgrades</div>
+                            <div class="data-value">Major DEXs shipping intents</div>
+                        </div>
+                        <div class="data-chip">
+                            <div class="data-label">User Experience</div>
+                            <div class="data-value">Improved execution quality</div>
+                        </div>
+                        <div class="data-chip">
+                            <div class="data-label">Developer Tools</div>
+                            <div class="data-value">New intent SDKs available</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Build Ideas -->
+<section class="section" id="ideas" style="background: var(--surface);">
+    <div class="container">
+        <div class="section-header">
+            <div>
+                <div class="section-title">💡 Build Ideas</div>
+                <div class="section-subtitle">5 concrete product ideas aligned with detected narratives</div>
+            </div>
+        </div>
+
+        <div class="ideas-grid">
+
+            <div class="idea-card animate delay-1">
+                <div class="idea-num">01</div>
+                <div class="idea-narrative">AI Agent Economy</div>
+                <div class="idea-title">AgentMarket</div>
+                <div class="idea-desc">A decentralized marketplace where AI agents post tasks, bid on work, and settle payments automatically. Think Fiverr for autonomous agents — with onchain escrow, reputation via cNFTs, and automatic dispute resolution.</div>
+                <ul class="idea-features">
+                    <li>Agent identity & reputation system using compressed NFTs</li>
+                    <li>Automatic task verification and milestone payments</li>
+                    <li>Multi-agent collaboration protocols</li>
+                    <li>Integration with frameworks (Eliza, LangChain, AgentKit)</li>
+                    <li>Real-time payment streaming for long-running tasks</li>
+                </ul>
+                <div class="idea-footer">
+                    <span class="idea-difficulty">Difficulty: Medium-High</span>
+                    <span class="idea-market">Massive Market</span>
+                </div>
+            </div>
+
+            <div class="idea-card animate delay-2">
+                <div class="idea-num">02</div>
+                <div class="idea-narrative">Compressed NFTs & Identity</div>
+                <div class="idea-title">ChainCredential</div>
+                <div class="idea-desc">Platform for issuing verifiable professional credentials (degrees, certs, work history) as compressed NFTs. Employers issue, employees own, recruiters verify — all onchain for sub-cent costs per credential.</div>
+                <ul class="idea-features">
+                    <li>cNFT-based credential issuance (sub-cent cost)</li>
+                    <li>Employer verification and signing system</li>
+                    <li>Privacy-preserving selective disclosure via ZK proofs</li>
+                    <li>Integration with Web2 identity providers</li>
+                    <li>Portable professional graph that users truly own</li>
+                </ul>
+                <div class="idea-footer">
+                    <span class="idea-difficulty">Difficulty: Medium</span>
+                    <span class="idea-market">$45M+ ARR potential</span>
+                </div>
+            </div>
+
+            <div class="idea-card animate delay-3">
+                <div class="idea-num">03</div>
+                <div class="idea-narrative">Real World Assets</div>
+                <div class="idea-title">RealYield</div>
+                <div class="idea-desc">Aggregator and analytics platform for all Solana RWA protocols. Discover tokenized real estate, bonds, commodities with proper risk metrics, yield calculations, and compliance integration.</div>
+                <ul class="idea-features">
+                    <li>Unified interface across RWA protocols (Credix, Maple, etc.)</li>
+                    <li>Real-time yield calculations and risk scoring</li>
+                    <li>KYC/compliance integration for regulated assets</li>
+                    <li>Portfolio tracking and tax reporting</li>
+                    <li>Educational content bridging TradFi → DeFi</li>
+                </ul>
+                <div class="idea-footer">
+                    <span class="idea-difficulty">Difficulty: Medium-High</span>
+                    <span class="idea-market">$10T+ addressable market</span>
+                </div>
+            </div>
+
+            <div class="idea-card animate delay-4">
+                <div class="idea-num">04</div>
+                <div class="idea-narrative">Consumer Payments</div>
+                <div class="idea-title">MicroPay</div>
+                <div class="idea-desc">Embeddable payment widget for websites enabling instant Solana payments with just a QR scan or click. No wallet setup for payers via session keys. Target: content creators, small merchants, tippers.</div>
+                <ul class="idea-features">
+                    <li>One-line JavaScript integration for any website</li>
+                    <li>Session key system (no approval popups)</li>
+                    <li>Automatic fiat conversion display</li>
+                    <li>Subscription and recurring payment support</li>
+                    <li>Mobile-first with deep-links to Phantom/Backpack</li>
+                </ul>
+                <div class="idea-footer">
+                    <span class="idea-difficulty">Difficulty: Low-Medium</span>
+                    <span class="idea-market">Stripe competitor (1-2% vs 3%)</span>
+                </div>
+            </div>
+
+            <div class="idea-card animate delay-5">
+                <div class="idea-num">05</div>
+                <div class="idea-narrative">DeFi 2.0 Intents</div>
+                <div class="idea-title">IntentSwap</div>
+                <div class="idea-desc">Chat interface for DeFi where users describe trades in plain English ("I want $500 of SOL by tomorrow with minimal slippage") and the system finds optimal execution across all Solana DEXs using intent routing.</div>
+                <ul class="idea-features">
+                    <li>Natural language understanding for trade intents</li>
+                    <li>Multi-DEX routing via Jupiter integration</li>
+                    <li>Time-delayed execution and limit orders</li>
+                    <li>MEV protection via encrypted intents</li>
+                    <li>AI-powered strategy suggestions</li>
+                </ul>
+                <div class="idea-footer">
+                    <span class="idea-difficulty">Difficulty: High</span>
+                    <span class="idea-market">Mass DeFi onboarding</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Signal Matrix -->
+<section class="section" id="signals">
+    <div class="container">
+        <div class="section-header">
+            <div>
+                <div class="section-title">📊 Signal Strength Matrix</div>
+                <div class="section-subtitle">Cross-source signal analysis per narrative</div>
+            </div>
+        </div>
+
+        <div class="signal-matrix">
+            <div class="signal-row">
+                <div class="signal-name">🤖 AI Agent Economy</div>
+                <div class="signal-bar-wrap">
+                    <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Onchain</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:80%;background:var(--accent)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Social</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:95%;background:var(--accent2)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Developer</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:90%;background:var(--accent3)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Research</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:75%;background:var(--warn)"></div></div>
+                </div>
+                <div class="signal-value" style="color:var(--accent)">95%</div>
+            </div>
+            <div class="signal-row">
+                <div class="signal-name">💳 Consumer Payments</div>
+                <div class="signal-bar-wrap">
+                    <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Onchain</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:85%;background:var(--accent)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Social</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:75%;background:var(--accent2)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Developer</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:70%;background:var(--accent3)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Research</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:80%;background:var(--warn)"></div></div>
+                </div>
+                <div class="signal-value" style="color:var(--accent)">82%</div>
+            </div>
+            <div class="signal-row">
+                <div class="signal-name">🏦 RWA Infrastructure</div>
+                <div class="signal-bar-wrap">
+                    <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Onchain</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:65%;background:var(--accent)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Social</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:60%;background:var(--accent2)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Developer</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:70%;background:var(--accent3)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Research</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:90%;background:var(--warn)"></div></div>
+                </div>
+                <div class="signal-value" style="color:var(--accent)">78%</div>
+            </div>
+            <div class="signal-row">
+                <div class="signal-name">🎨 cNFTs & Identity</div>
+                <div class="signal-bar-wrap">
+                    <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Onchain</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:60%;background:var(--accent)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Social</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:55%;background:var(--accent2)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Developer</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:75%;background:var(--accent3)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Research</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:65%;background:var(--warn)"></div></div>
+                </div>
+                <div class="signal-value" style="color:var(--warn)">68%</div>
+            </div>
+            <div class="signal-row">
+                <div class="signal-name">🔄 DeFi 2.0 Intents</div>
+                <div class="signal-bar-wrap">
+                    <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Onchain</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:50%;background:var(--accent)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Social</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:45%;background:var(--accent2)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Developer</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:65%;background:var(--accent3)"></div></div>
+                    <div style="font-size:11px;color:var(--text2);margin:6px 0 4px">Research</div>
+                    <div class="signal-bar"><div class="signal-bar-fill" style="width:55%;background:var(--warn)"></div></div>
+                </div>
+                <div class="signal-value" style="color:var(--warn)">56%</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Methodology -->
+<section class="section" id="methodology" style="background: var(--surface);">
+    <div class="container">
+        <div class="section-header">
+            <div>
+                <div class="section-title">🔬 Methodology</div>
+                <div class="section-subtitle">How narratives are detected and signals ranked</div>
+            </div>
+        </div>
+
+        <div class="method-grid">
+            <div class="method-card animate delay-1">
+                <div class="method-icon" style="background: rgba(20,241,149,0.1);">🔗</div>
+                <h3>Onchain Analysis</h3>
+                <p>Monitor transaction patterns, new program deployments, wallet behavior, and TVL movements across Solana protocols.</p>
+                <ul class="method-sources">
+                    <li>Solscan — Transaction & program data</li>
+                    <li>SolanaFM — Account & instruction analysis</li>
+                    <li>Helius — RPC data & webhooks</li>
+                    <li>DeFiLlama — TVL & protocol metrics</li>
+                </ul>
+            </div>
+            <div class="method-card animate delay-2">
+                <div class="method-icon" style="background: rgba(153,69,255,0.1);">💬</div>
+                <h3>Social Intelligence</h3>
+                <p>Track KOL activity, community sentiment, viral discussions, and emerging topics across social platforms.</p>
+                <ul class="method-sources">
+                    <li>X (Twitter) — Mert, Toly, Akshay, Raj, etc.</li>
+                    <li>Discord — Developer communities</li>
+                    <li>Reddit — r/solana sentiment analysis</li>
+                    <li>Ecosystem blogs & newsletters</li>
+                </ul>
+            </div>
+            <div class="method-card animate delay-3">
+                <div class="method-icon" style="background: rgba(0,209,255,0.1);">👨‍💻</div>
+                <h3>Developer Activity</h3>
+                <p>Analyze GitHub repository creation, commit patterns, star growth, and SDK adoption trends across the ecosystem.</p>
+                <ul class="method-sources">
+                    <li>GitHub — Repos, commits, stars, forks</li>
+                    <li>npm/cargo — Package downloads</li>
+                    <li>Solana Stack Exchange — Q&A trends</li>
+                    <li>Anchor/SDK version adoption</li>
+                </ul>
+            </div>
+            <div class="method-card animate delay-4">
+                <div class="method-icon" style="background: rgba(255,217,61,0.1);">📊</div>
+                <h3>Research & Reports</h3>
+                <p>Synthesize institutional research, market reports, and ecosystem analyses from leading crypto intelligence firms.</p>
+                <ul class="method-sources">
+                    <li>Electric Capital — Developer Report</li>
+                    <li>Messari — Ecosystem analysis</li>
+                    <li>Helius — Research blog posts</li>
+                    <li>Fund/VC market outlooks</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <h3 style="font-size: 18px; margin-bottom: 20px;">Detection Pipeline</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Step 1</div>
+                    <div class="timeline-content">
+                        <h4>Data Collection</h4>
+                        <p>Aggregate signals from all four source categories. Normalize data formats and timestamp alignment.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Step 2</div>
+                    <div class="timeline-content">
+                        <h4>Pattern Recognition</h4>
+                        <p>Identify recurring themes, acceleration points, and cross-source correlations that indicate emerging narratives.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Step 3</div>
+                    <div class="timeline-content">
+                        <h4>Cross-Validation</h4>
+                        <p>Verify each narrative across multiple independent sources. Discard signals that appear in only one channel.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Step 4</div>
+                    <div class="timeline-content">
+                        <h4>Strength & Trend Analysis</h4>
+                        <p>Score signal strength (0-100%), assess momentum direction (accelerating/steady/declining), and rank narratives.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Step 5</div>
+                    <div class="timeline-content">
+                        <h4>Idea Generation</h4>
+                        <p>Map underserved needs to narratives, assess feasibility, and generate concrete product concepts with market analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p style="margin-bottom: 8px;">
+            Built autonomously by AI Agent <strong style="color:var(--accent)">copilot-superteam-agent</strong> • February 2026
+        </p>
+        <p>
+            <a href="https://github.com/S1ngle777/solana-narrative-detector">GitHub Repository</a> •
+            <a href="https://superteam.fun/earn/agents">Superteam Earn</a> •
+            Powered by Solana ◎
+        </p>
+    </div>
+</footer>
+
+<script>
+function toggleCard(card) {
+    card.classList.toggle('expanded');
+    const btn = card.querySelector('.expand-btn');
+    if (card.classList.contains('expanded')) {
+        btn.textContent = '▲ Hide Details';
+    } else {
+        btn.textContent = '▼ Show Details';
+    }
+}
+
+// Animate on scroll
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+</script>
+
+</body>
+</html>

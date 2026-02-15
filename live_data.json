@@ -1,0 +1,289 @@
+{
+  "sol_price": {
+    "price": 87.99,
+    "change_24h": 2.0213570157547838,
+    "market_cap": 49990760943.936844,
+    "fetched_at": "2026-02-15T14:28:10.747293"
+  },
+  "solana_tps": {
+    "average_tps": 3323.5,
+    "samples": 5,
+    "fetched_at": "2026-02-15T14:28:10.975809"
+  },
+  "defi_tvl": {
+    "tvl": 6771211031.454036,
+    "tvl_formatted": "$6.77B",
+    "fetched_at": "2026-02-15T14:28:11.200220"
+  },
+  "top_protocols": {
+    "total_solana_protocols": 358,
+    "top_10": [
+      {
+        "name": "Binance CEX",
+        "tvl": 137626.02,
+        "category": "CEX",
+        "change_1d": 1.2372182402441183,
+        "change_7d": 0.15080342498234245
+      },
+      {
+        "name": "Lido",
+        "tvl": 19165.49,
+        "category": "Liquid Staking",
+        "change_1d": -2.9936178586030877,
+        "change_7d": -5.8647499569487564
+      },
+      {
+        "name": "OKX",
+        "tvl": 18194.19,
+        "category": "CEX",
+        "change_1d": -1.313186175291591,
+        "change_7d": -3.494245135133653
+      },
+      {
+        "name": "Bitfinex",
+        "tvl": 17947.39,
+        "category": "CEX",
+        "change_1d": -0.9029481986525525,
+        "change_7d": 0.6591698368352468
+      },
+      {
+        "name": "Bybit",
+        "tvl": 15493.11,
+        "category": "CEX",
+        "change_1d": -0.1333463006322546,
+        "change_7d": -0.7113571546713615
+      },
+      {
+        "name": "Bitget",
+        "tvl": 6159.12,
+        "category": "CEX",
+        "change_1d": 0.1329818152446336,
+        "change_7d": -7.889531162761713
+      },
+      {
+        "name": "HTX",
+        "tvl": 5607.12,
+        "category": "CEX",
+        "change_1d": 0.07317526382489348,
+        "change_7d": 2.8962756568553516
+      },
+      {
+        "name": "Gate",
+        "tvl": 4923.47,
+        "category": "CEX",
+        "change_1d": 0.6127917318790281,
+        "change_7d": 0.43014548783845896
+      },
+      {
+        "name": "MEXC",
+        "tvl": 4517.15,
+        "category": "CEX",
+        "change_1d": 0.2490730077682457,
+        "change_7d": 0.66934155839688
+      },
+      {
+        "name": "Deribit",
+        "tvl": 4100.19,
+        "category": "CEX",
+        "change_1d": -0.08239369921923867,
+        "change_7d": 1.0188731905547854
+      }
+    ],
+    "fetched_at": "2026-02-15T14:28:14.506993"
+  },
+  "github_trends": {
+    "total_new_repos": 1584,
+    "trending_repos": [
+      {
+        "name": "qntx/x402-openai-python",
+        "description": "Drop-in OpenAI Python client with transparent x402 payment support.",
+        "stars": 39,
+        "language": "Python",
+        "created": "2026-02-11",
+        "topics": [
+          "agent",
+          "ethereum",
+          "llm",
+          "openai",
+          "python"
+        ]
+      },
+      {
+        "name": "qntx/r402",
+        "description": "x402 Payment Protocol SDK for Rust.",
+        "stars": 34,
+        "language": "Rust",
+        "created": "2026-02-09",
+        "topics": [
+          "ethereum",
+          "rust",
+          "solana",
+          "x402",
+          "x402-facilitator"
+        ]
+      },
+      {
+        "name": "qntx/x402-openai-typescript",
+        "description": "Drop-in OpenAI Typescript client with transparent x402 payment support.",
+        "stars": 27,
+        "language": "TypeScript",
+        "created": "2026-02-11",
+        "topics": [
+          "ethereum",
+          "openai",
+          "solana",
+          "typescript",
+          "web3"
+        ]
+      },
+      {
+        "name": "vnxfsc/dex-pinocchio-cpi",
+        "description": "Pinocchio-compatible CPI client library for Solana DEX programs. Supports 35 major DEX protocols.",
+        "stars": 16,
+        "language": "Rust",
+        "created": "2026-02-03",
+        "topics": []
+      },
+      {
+        "name": "younesouhene-netizen/Solana-Memecoin-Trading-Bot",
+        "description": "🐙 Solana Memecoin Trading Bot suite for sniping, bundling and volume shaping on Raydium and PumpFun;",
+        "stars": 16,
+        "language": null,
+        "created": "2026-02-10",
+        "topics": [
+          "adaptive-design",
+          "api",
+          "auto",
+          "auto-trading",
+          "bot"
+        ]
+      },
+      {
+        "name": "vnxfsc/solana-bpf-reverse",
+        "description": "A comprehensive reverse engineering toolkit for Solana BPF programs. Analyze compiled `.so` files to",
+        "stars": 13,
+        "language": "Python",
+        "created": "2026-02-04",
+        "topics": []
+      },
+      {
+        "name": "YouthAIAgent/agentwallet",
+        "description": "Open-source custodial wallet infrastructure for AI agents — Solana-native with escrow, marketplace, ",
+        "stars": 9,
+        "language": "Python",
+        "created": "2026-02-10",
+        "topics": [
+          "agent-protocol",
+          "ai-agents",
+          "ai-wallet",
+          "cryptocurrency",
+          "defi"
+        ]
+      },
+      {
+        "name": "bluntbrain/solscan-react-native",
+        "description": "A React Native app to explore Solana wallets. View SOL balance, token holdings, and recent transacti",
+        "stars": 8,
+        "language": "TypeScript",
+        "created": "2026-02-10",
+        "topics": []
+      },
+      {
+        "name": "screenerbotio/ScreenerBot",
+        "description": "High-performance Solana trading bot with AI-powered analysis",
+        "stars": 8,
+        "language": "Rust",
+        "created": "2026-02-08",
+        "topics": [
+          "algorithmic-trading",
+          "cryptocurrency",
+          "dexscreener",
+          "fluxbeam",
+          "geckoterminal"
+        ]
+      },
+      {
+        "name": "vnorby/spl-forex",
+        "description": "Code behind spl.forex, a Solana stablecoin-based FX market",
+        "stars": 6,
+        "language": "TypeScript",
+        "created": "2026-02-13",
+        "topics": []
+      }
+    ],
+    "search_period": "Since 2026-02-01",
+    "fetched_at": "2026-02-15T14:28:15.078991"
+  },
+  "agent_repos": {
+    "total_count": 707,
+    "repos": [
+      {
+        "name": "manicinc/wunderland-sol",
+        "description": "Social network of agentic AIs on Solana — HEXACO personality on-chain, provenance-verified posts, re",
+        "stars": 3,
+        "updated": "2026-02-15"
+      },
+      {
+        "name": "Zeagalf/apollotoday",
+        "description": "🌟 Build smart on-chain solutions with Rust, focusing on DeFi protocols and AI agents for enhanced tr",
+        "stars": 1,
+        "updated": "2026-02-15"
+      },
+      {
+        "name": "Johnr12124/AI-Solana_Bot",
+        "description": "🤖 Trade effectively on the Solana blockchain with AI-Solana_Bot, featuring anti-scam protection and ",
+        "stars": 1,
+        "updated": "2026-02-15"
+      },
+      {
+        "name": "rhaylee250/blockchain-ai-agent-project",
+        "description": "🎨 Generate AI-driven art from Twitter content, securely store it on the Solana blockchain, and showc",
+        "stars": 1,
+        "updated": "2026-02-15"
+      },
+      {
+        "name": "Mohamed-mufleh/ai-trading-bot",
+        "description": "🤖 Analyze market data and execute real-time trades with a deep learning crypto trading bot powered b",
+        "stars": 8,
+        "updated": "2026-02-15"
+      },
+      {
+        "name": "caldanasabs/KYA-System-AI-Agents",
+        "description": "🔍 Establish unique identities for AI agents using Solana blockchain and NFTs, enhancing security and",
+        "stars": 2,
+        "updated": "2026-02-15"
+      },
+      {
+        "name": "Kvexx/web3-ai-trading-agent",
+        "description": "🤖 Build an autonomous Web3 AI trading agent for ETH-USDC on the BASE blockchain with Uniswap V4; lea",
+        "stars": 2,
+        "updated": "2026-02-15"
+      },
+      {
+        "name": "cogusp/agistry-framework-v1",
+        "description": "Agistry is a decentralized registry on the Solana blockchain that helps AI agents connect with off-c",
+        "stars": 0,
+        "updated": "2026-02-15"
+      },
+      {
+        "name": "premkumar610/Scoria-AI",
+        "description": "Scoria AI is a decentralized AI agent framework on blockchain, enabling private, on-device Web3 inte",
+        "stars": 3,
+        "updated": "2026-02-15"
+      },
+      {
+        "name": "edmonddantesj/solana-sentinel",
+        "description": "Risk-Adjusted Fee-Sharing Vault for Autonomous AI Trading Agents (Solana AI Hackathon 2026)",
+        "stars": 1,
+        "updated": "2026-02-15"
+      }
+    ],
+    "fetched_at": "2026-02-15T14:28:15.680627"
+  },
+  "metadata": {
+    "collected_at": "2026-02-15T14:28:15.680776",
+    "sources_queried": 6,
+    "successful": 5,
+    "errors": 1
+  }
+}
